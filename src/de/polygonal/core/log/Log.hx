@@ -52,7 +52,7 @@ class Log
 {
 	public static var globalHandler:Array<LogHandler> = null;
 	
-	static var _logger:Hash<Log> = null;
+	static var _logger:Map<String, Log> = null;
 	static var _counter = 0;
 	
 	/**
@@ -78,7 +78,7 @@ class Log
 	 */
 	public static function getLog(x:Dynamic):Log
 	{
-		if (_logger == null) _logger = new Hash<Log>();
+		if (_logger == null) _logger = new Map<String, Log>();
 		
 		var name:String = null;
 		if (Std.is(x, Class))

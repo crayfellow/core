@@ -45,7 +45,7 @@ import de.polygonal.ds.pooling.DynamicObjectPool;
  * <p>An object with state that is observed by an <em>IObserver</em> implementation.</p>
  * <p>See <a href="http://en.wikipedia.org/wiki/Observer_pattern" target="_blank">http://en.wikipedia.org/wiki/Observer_pattern</a>.</p>
  */
-class Observable extends HashableItem, implements IObservable
+class Observable extends HashableItem implements IObservable
 {
 	static var _nextGUID = 1;
 	static var _registry:ListSet<Observable>;
@@ -168,7 +168,7 @@ class Observable extends HashableItem, implements IObservable
 	var _stack:ArrayedStack<Dynamic>;
 	var _type:Int;
 	var _userData:Dynamic;
-	var _nodeLookup:IntHash<ObserverNode>;
+	var _nodeLookup:Map<Int, ObserverNode>;
 	
 	/**
 	 * @param poolSize because observers are stored internally in a linked list it's necessary to create a node object per observer.<br/>
@@ -196,7 +196,7 @@ class Observable extends HashableItem, implements IObservable
 		_stack         = new ArrayedStack<Dynamic>();
 		_type          = 0;
 		_userData      = null;
-		_nodeLookup    = new IntHash();
+		_nodeLookup    = new Map();
 	}
 	
 	/**
@@ -282,7 +282,7 @@ class Observable extends HashableItem, implements IObservable
 		_hook          = null;
 		_observer      = null;
 		_observerCount = 0;
-		_nodeLookup    = new IntHash();
+		_nodeLookup    = new Map();
 		
 		if (purge)
 		{

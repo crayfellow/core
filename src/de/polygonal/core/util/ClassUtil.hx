@@ -86,7 +86,7 @@ class ClassUtil
 	 * @param include if defined, only returns fields that match the given regular expression.
 	 * @param excludeFunctions if true, excludes functions.
 	 */
-	public static function getClassFields(x:Class<haxe.rtti.Infos>, include:EReg = null, excludeFunctions = true):Array<{name:String, value:Dynamic}>
+	public static function getClassFields(x:Class<Dynamic>, include:EReg = null, excludeFunctions = true):Array<{name:String, value:Dynamic}>
 	{
 		var typeInfo:TypeTree;
 		var rtti:String = Reflect.field(x, '__rtti');

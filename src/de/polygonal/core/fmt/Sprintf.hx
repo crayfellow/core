@@ -40,7 +40,6 @@ import haxe.macro.Type;
 
 using de.polygonal.core.math.Mathematics;
 using de.polygonal.core.fmt.ASCII;
-using haxe.Int32;
 
 /**
  * <p>A C sprintf implementation.</p>
@@ -103,13 +102,13 @@ using haxe.Int32;
  */
 class Sprintf
 {
-	var formatHash:IntHash< Dynamic >;
+	var formatHash:Map<Int, Dynamic>;
 	
-	static var dataTypeHash:IntHash<FormatDataType> = makeDataTypeHash();
+	static var dataTypeHash:Map<Int, FormatDataType> = makeDataTypeHash();
 	
 	private static function makeDataTypeHash()
 	{
-		var hash:IntHash<FormatDataType> = new IntHash();
+		var hash:Map<Int, FormatDataType> = new Map();
 		hash.set("i".code, FmtInteger(ISignedDecimal));
 		hash.set("d".code, FmtInteger(ISignedDecimal));
 		hash.set("u".code, FmtInteger(IUnsignedDecimal));
@@ -135,20 +134,20 @@ class Sprintf
 	
 	static var _instance:Sprintf = null;
 	
-	var formatIntFuncHash:IntHash < Int->FormatArgs->String >;
-	var formatFloatFuncHash:IntHash < Float->FormatArgs->String >;
-	var formatStringFuncHash:IntHash < String->FormatArgs->String >;
+	var formatIntFuncHash:Map<Int, Int->FormatArgs->String>;
+	var formatFloatFuncHash:Map<Int, Float->FormatArgs->String>;
+	var formatStringFuncHash:Map<Int, String->FormatArgs->String>;
 	
 	#if macro
-	var formatIntFuncNameHash:IntHash < String>;
-	var formatFloatFuncNameHash:IntHash < String >;
-	var formatStringFuncNameHash:IntHash < String > ;
+	var formatIntFuncNameHash:Map<Int, String>;
+	var formatFloatFuncNameHash:Map<Int, String>;
+	var formatStringFuncNameHash:Map<Int, String> ;
 	
 	function makeNameHashes()
 	{
-		formatIntFuncNameHash = new IntHash();
-		formatFloatFuncNameHash = new IntHash();
-		formatStringFuncNameHash = new IntHash();
+		formatIntFuncNameHash = new Map();
+		formatFloatFuncNameHash = new Map();
+		formatStringFuncNameHash = new Map();
 		
 		formatIntFuncNameHash.set(std.Type.enumIndex(ISignedDecimal), "formatSignedDecimal");
 		formatIntFuncNameHash.set(std.Type.enumIndex(IUnsignedDecimal), "formatUnsignedDecimal");
@@ -167,9 +166,9 @@ class Sprintf
 	
 	function new()
 	{
-		formatIntFuncHash = new IntHash();
-		formatFloatFuncHash = new IntHash();
-		formatStringFuncHash = new IntHash();
+		formatIntFuncHash = new Map();
+		formatFloatFuncHash = new Map();
+		formatStringFuncHash = new Map();
 		
 		formatIntFuncHash.set(std.Type.enumIndex(ISignedDecimal), formatSignedDecimal);
 		formatIntFuncHash.set(std.Type.enumIndex(IUnsignedDecimal), formatUnsignedDecimal);
@@ -199,7 +198,7 @@ class Sprintf
 	 * The argument array length should match the number of %-tags that expect a value.
 	 * @return the formatted string.
 	 */
-	@:macro public static function format(_fmt:ExprOf<String>, _passedArgs:Array<Expr>):ExprOf<String>
+	public static macro function format(_fmt:ExprOf<String>, _passedArgs:Array<Expr>):ExprOf<String>
 	{
 		var error = false;
 		switch(Context.typeof(_fmt))
@@ -832,7 +831,7 @@ class Sprintf
 			do
 			{
 				output = ((i.and(1.ofInt()).compare(0.ofInt()) > 0) ? '1' : '0') + output;
-				i = haxe.Int32.ushr(i, 1);
+				i = haxe.Int.ushr(i, 1);
 			}
 			while (i.compare(0.ofInt()) > 0);
 			#end
@@ -929,7 +928,7 @@ class Sprintf
 			#if haxe3
 			haxe.Int64.make(0, value);
 			#else
-			haxe.Int64.make(haxe.Int32.ofInt(0), haxe.Int32.ofInt(value));
+			haxe.Int64.make(haxe.Int.ofInt(0), haxe.Int.ofInt(value));
 			#end
 			
 			output = haxe.Int64.toStr(x);
